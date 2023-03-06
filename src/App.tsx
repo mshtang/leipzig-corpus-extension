@@ -24,10 +24,11 @@ interface SentencesResponse {
 function App() {
   const [keyword, setKeyword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [showLogo, setShowLogo] = useState(true);
   const [content, setContent] = useState<Sentence[] | null>();
 
   const handleClick = async () => {
-    const queryUrl = `${baseUrl}/sentences/deu_news_2012_1M/sentences/${keyword}?offset=10&limit=10`;
+    const queryUrl = `${baseUrl}/sentences/deu_news_2012_1M/sentences/${keyword}?offset=0&limit=10`;
     try {
       const response = await getWithTimeout(queryUrl, {
         timeout: REQUEST_TIMEOUT,
@@ -66,23 +67,15 @@ function App() {
     if (value.length === 0) {
       setErrorMsg('');
       setContent(null);
+      setShowLogo(true);
+    } else {
+      setShowLogo(false);
     }
   }
 
   return (
     <div className='App'>
       <div className='header'>
-        <div className='logoSection'>
-          <a
-            href='https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018'
-            target='_blank'>
-            <img
-              className='logo'
-              src={projectLogo}
-              alt='leipzig corpora extension project logo'
-            />
-          </a>
-        </div>
         <div className='search'>
           <input
             placeholder='Which word do you want to know?'
@@ -90,17 +83,29 @@ function App() {
             onChange={e => {
               handleSearchKeywordChange(e);
             }}></input>
-          <button
-            className='searchIcon'
-            onClick={e => {
-              e.preventDefault();
-              return handleClick();
-            }}>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              color='#209cee'
-            />
-          </button>
+          {showLogo ? (
+            <a
+              href='https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018'
+              target='_blank'>
+              <img
+                className='logo'
+                src={projectLogo}
+                alt='leipzig corpora extension project logo'
+              />
+            </a>
+          ) : (
+            <button
+              className='searchIcon'
+              onClick={e => {
+                e.preventDefault();
+                return handleClick();
+              }}>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                color='#209cee'
+              />
+            </button>
+          )}
         </div>
       </div>
       {errorMsg.length !== 0 ? (
