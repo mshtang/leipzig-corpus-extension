@@ -11,10 +11,10 @@
 }
 
 .logo {
-  height: 5em;
   will-change: filter;
   transition: filter 300ms;
-  margin: 1.5em;
+  margin-left: 20px;
+  height: 3em;
 }
 .logo:hover {
   filter: drop-shadow(0 0 1em #209cee57);
@@ -29,27 +29,31 @@
 
 .header {
   display: flex;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.search {
-  display: flex;
-  align-items: stretch;
-  flex-basis: 500px;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  height: 3em;
 }
 
 .searchBox {
-  flex: 1;
+  flex-grow: 1;
+  height: 100%;
+  width: 300px;
   border: none;
   border-bottom: 2px solid #209cee57;
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
-.searchIcon {
-  background-color: transparent;
-  border: 2px solid #209cee57;
+.searchButton {
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  border: none;
+  background-color: #209cee;
+  color: white;
   margin-left: 20px;
+  transition: background-color 0.3s ease;
+  padding: 0;
 }
 
 .content {
@@ -76,9 +80,22 @@
   margin-top: 12px;
   width: 100%;
   font-size: 0.85em;
-  background-color: rgba(236, 228, 218, 0.445);
+  border-radius: 4px;
+  background-color: #ffffffe1;
 }
 
 .sourceText > div {
   padding: 4px;
+}
+
+.sentenceCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: rgba(236, 228, 218, 0.445);
+  margin: 20px;
+}
+
+.sentenceCard svg {
+  padding-right: 10px;
 }

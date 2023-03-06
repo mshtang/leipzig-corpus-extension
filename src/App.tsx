@@ -76,37 +76,36 @@ function App() {
   return (
     <div className='App'>
       <div className='header'>
-        <div className='search'>
-          <input
-            placeholder='Which word do you want to know?'
-            className='searchBox'
-            onChange={e => {
-              handleSearchKeywordChange(e);
-            }}></input>
-          {showLogo ? (
-            <a
-              href='https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018'
-              target='_blank'>
-              <img
-                className='logo'
-                src={projectLogo}
-                alt='leipzig corpora extension project logo'
-              />
-            </a>
-          ) : (
-            <button
-              className='searchIcon'
-              onClick={e => {
-                e.preventDefault();
-                return handleClick();
-              }}>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                color='#209cee'
-              />
-            </button>
-          )}
-        </div>
+        <input
+          placeholder='Which word do you want to know?'
+          className='searchBox'
+          onChange={e => {
+            handleSearchKeywordChange(e);
+          }}></input>
+        {showLogo ? (
+          <a
+            style={{ height: '48px' }}
+            href='https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018'
+            target='_blank'>
+            <img
+              className='logo'
+              src={projectLogo}
+              alt='leipzig corpora extension project logo'
+            />
+          </a>
+        ) : (
+          <button
+            className='searchButton'
+            onClick={e => {
+              e.preventDefault();
+              return handleClick();
+            }}>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              color='white'
+            />
+          </button>
+        )}
       </div>
       {errorMsg.length !== 0 ? (
         <div className='card errorMessage'>{errorMsg}</div>
