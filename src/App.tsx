@@ -1,6 +1,6 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChangeEvent, useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import './App.css';
 import projectLogo from './assets/logo.png';
 import SentenceDetail from './components/SentenceDetail';
@@ -61,8 +61,10 @@ function App() {
     }
   };
 
-  function handleSearchKeywordChange(e: ChangeEvent<HTMLInputElement>) {
-    const { value } = e.currentTarget;
+  function handleSearchKeywordChange(
+    currentTarget: EventTarget & HTMLInputElement
+  ) {
+    const { value } = currentTarget;
     setKeyword(value);
     if (value.length === 0) {
       setErrorMsg('');
@@ -73,14 +75,20 @@ function App() {
     }
   }
 
+  function handleKeyPressed(e: KeyboardEvent<HTMLInputElement>): void {
+    if (e.key != 'Enter') return;
+    handleClick();
+  }
+
   return (
     <div className='App'>
       <div className='header'>
         <input
           placeholder='Which word do you want to know?'
           className='searchBox'
+          onKeyDown={e => handleKeyPressed(e)}
           onChange={e => {
-            handleSearchKeywordChange(e);
+            handleSearchKeywordChange(e.currentTarget);
           }}></input>
         {showLogo ? (
           <a
