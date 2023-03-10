@@ -1,11 +1,14 @@
+import { Paper } from '@mui/material';
 import './App.css';
 import SentencePage from './components/SentencePage';
 
 function App() {
   return (
-    <div className='App'>
+    <Paper
+      elevation={2}
+      className='App'>
       <SentencePage />
-    </div>
+    </Paper>
   );
 }
 

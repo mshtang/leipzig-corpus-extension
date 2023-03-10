@@ -1,10 +1,6 @@
+import Divider from '@mui/material/Divider';
 import React from 'react';
-
-export interface Source {
-  date: string;
-  id: string;
-  url: string;
-}
+import { Source } from '../types/SentenceTypes';
 
 interface SourceDetailProps {
   source: Source;
@@ -18,6 +14,7 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ source }) => {
 
   return (
     <div className='sourceText'>
+      <Divider variant='middle' />
       <div>Retrieved on: {new Date(source.date).toLocaleDateString()}</div>
       <div>
         From:{' '}

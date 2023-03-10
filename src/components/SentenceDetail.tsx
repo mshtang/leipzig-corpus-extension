@@ -1,7 +1,10 @@
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Card, IconButton, Typography } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
 import React, { useState } from 'react';
-import SourceDetail, { Source } from './SourceDetail';
+import { Source } from '../types/SentenceTypes';
+import SourceDetail from './SourceDetail';
 
 interface SentenceDetailProps {
   keyword: string;
@@ -15,26 +18,36 @@ const SentenceDetail: React.FC<SentenceDetailProps> = ({
   source,
 }) => {
   const [toggleShowSource, setToggleShowSource] = useState(false);
+
   return (
-    <div className='card sentenceCard'>
-      <div className='contentText'>
-        {sentence.split(keyword).map((part, i) => {
-          if (i === 0) {
-            return part;
-          } else {
-            return [<strong key={i}>{keyword}</strong>, part];
-          }
-        })}
-        {toggleShowSource && <SourceDetail source={source} />}
-      </div>
-      <div onClick={e => setToggleShowSource(!toggleShowSource)}>
-        {toggleShowSource ? (
-          <FontAwesomeIcon icon={faCaretUp} />
-        ) : (
-          <FontAwesomeIcon icon={faCaretDown} />
-        )}{' '}
-      </div>
-    </div>
+    <Card sx={{ margin: '10px' }}>
+      <CardContent
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+        }}>
+        <Typography
+          variant='body1'
+          align='left'>
+          {sentence.split(keyword).map((part, i) => {
+            if (i === 0) {
+              return part;
+            } else {
+              return [<strong key={i}>{keyword}</strong>, part];
+            }
+          })}
+          {toggleShowSource && <SourceDetail source={source} />}
+        </Typography>
+        <IconButton onClick={_e => setToggleShowSource(!toggleShowSource)}>
+          {toggleShowSource ? (
+            <KeyboardArrowUpIcon />
+          ) : (
+            <KeyboardArrowDownIcon />
+          )}{' '}
+        </IconButton>
+      </CardContent>
+    </Card>
   );
 };
 

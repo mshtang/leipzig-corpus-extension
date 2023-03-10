@@ -1,24 +1,15 @@
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, Card, List, Stack, TextField } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import projectLogo from '../assets/logo.png';
+import { Sentence, SentencesResponse } from '../types/SentenceTypes';
 import { getWithTimeout } from '../Utils/getWithTimeout';
 import SentenceDetail from './SentenceDetail';
-import { Source } from './SourceDetail';
 
 const baseUrl = 'http://api.corpora.uni-leipzig.de/ws';
 const REQUEST_TIMEOUT = 5 * 1000; // 15s timeout
-
-interface Sentence {
-  id: string;
-  sentence: string;
-  source: Source;
-}
-
-interface SentencesResponse {
-  count: number;
-  sentences: Sentence[];
-}
 
 const SentencePage: React.FC = () => {
   const [keyword, setKeyword] = useState('');
@@ -61,7 +52,7 @@ const SentencePage: React.FC = () => {
   };
 
   function handleSearchKeywordChange(
-    currentTarget: EventTarget & HTMLInputElement
+    currentTarget: EventTarget & (HTMLTextAreaElement | HTMLInputElement)
   ) {
     const { value } = currentTarget;
     setKeyword(value);
@@ -74,24 +65,32 @@ const SentencePage: React.FC = () => {
     }
   }
 
-  function handleKeyPressed(e: React.KeyboardEvent<HTMLInputElement>): void {
+  function handleKeyPressed(e: React.KeyboardEvent<HTMLDivElement>): void {
     if (e.key != 'Enter') return;
     handleClick();
   }
 
   return (
-    <div className='App'>
-      <div className='header'>
-        <input
-          placeholder='Which word do you want to know?'
-          className='searchBox'
+    <Stack
+      sx={{ height: '100%' }}
+      alignItems='center'
+      justifyContent='flexStart'
+      spacing={4}>
+      <Stack
+        direction='row'
+        spacing={2}>
+        <TextField
+          sx={{ width: '300px' }}
+          variant='standard'
+          id='searchBox'
+          label='Which word do you want to know?'
           onKeyDown={e => handleKeyPressed(e)}
           onChange={e => {
             handleSearchKeywordChange(e.currentTarget);
-          }}></input>
+          }}></TextField>
         {showLogo ? (
           <a
-            style={{ height: '48px' }}
+            className='linkToLeipzig'
             href='https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018'
             target='_blank'>
             <img
@@ -101,23 +100,36 @@ const SentencePage: React.FC = () => {
             />
           </a>
         ) : (
-          <button
-            className='searchButton'
-            onClick={e => {
-              e.preventDefault();
-              return handleClick();
-            }}>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              color='white'
+          <Button
+            onClick={handleClick}
+            sx={{
+              minWidth: 0,
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              backgroundColor: '#209cee',
+              marginLeft: '10px',
+            }}
+            variant='contained'>
+            <SearchIcon
+              sx={{ color: 'white' }}
+              fontSize='large'
             />
-          </button>
+          </Button>
         )}
-      </div>
+      </Stack>
       {errorMsg.length !== 0 ? (
-        <div className='card errorMessage'>{errorMsg}</div>
+        <Card>
+          <CardContent>
+            <Typography
+              variant='h4'
+              color='error'>
+              {errorMsg}
+            </Typography>
+          </CardContent>
+        </Card>
       ) : (
-        <div className='content'>
+        <List sx={{ overflow: 'auto' }}>
           {content?.map(sentence => {
             return (
               <SentenceDetail
@@ -128,9 +140,9 @@ const SentencePage: React.FC = () => {
               />
             );
           })}
-        </div>
+        </List>
       )}
-    </div>
+    </Stack>
   );
 };
 

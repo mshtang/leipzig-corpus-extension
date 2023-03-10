@@ -5,54 +5,24 @@
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  height: 600px;
+  padding: 20px;
+}
+
+.linkToLeipzig {
+  height: 48px;
+  margin-left: 10px;
 }
 
 .logo {
   will-change: filter;
   transition: filter 300ms;
-  margin-left: 20px;
-  height: 3em;
+  width: 48px;
+  height: 48px;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 1em #209cee57);
-}
-
-.card {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 800px;
-  height: 3em;
-}
-
-.searchBox {
-  flex-grow: 1;
-  height: 100%;
-  width: 300px;
-  border: none;
-  border-bottom: 2px solid #209cee57;
-  font-size: 1.2em;
-}
-
-.searchButton {
-  height: 3em;
-  width: 3em;
-  border-radius: 50%;
-  border: none;
-  background-color: #209cee;
-  color: white;
-  margin-left: 20px;
-  transition: background-color 0.3s ease;
-  padding: 0;
+  filter: drop-shadow(0 0 1em #209cee9d);
 }
 
 .content {
@@ -66,9 +36,6 @@
   margin: 1em;
   font-size: 1.2em;
   border: 2px solid red;
-  max-width: 500px;
-  overflow-wrap: normal;
-  flex: 1;
 }
 
 .contentText {
