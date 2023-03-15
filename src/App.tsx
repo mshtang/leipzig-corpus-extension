@@ -1,15 +1,8 @@
-import { Paper } from '@mui/material';
 import './App.css';
-import SentencePage from './components/SentencePage';
+import BottomNav from './components/BottomNav';
 
 function App() {
-  return (
-    <Paper
-      elevation={2}
-      className='App'>
-      <SentencePage />
-    </Paper>
-  );
+  return <BottomNav />;
 }
 
 export default App;

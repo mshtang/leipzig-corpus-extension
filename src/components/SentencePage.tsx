@@ -72,7 +72,7 @@ const SentencePage: React.FC = () => {
 
   return (
     <Stack
-      sx={{ height: '100%' }}
+      sx={{ height: '500px' }}
       alignItems='center'
       justifyContent='flexStart'
       spacing={4}>
