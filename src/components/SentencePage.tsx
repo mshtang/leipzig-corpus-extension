@@ -1,21 +1,49 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Card, List, Stack, TextField } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
+import { Button, Stack, Tab, Tabs, TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import projectLogo from '../assets/logo.png';
 import { Sentence, SentencesResponse } from '../types/SentenceTypes';
 import { getWithTimeout } from '../Utils/getWithTimeout';
-import SentenceDetail from './SentenceDetail';
+import SentenceTabPanel from './SentenceTabPanel';
+import WordDetailTabPanel from './WordDetailTabPanel';
 
 const baseUrl = 'http://api.corpora.uni-leipzig.de/ws';
 const REQUEST_TIMEOUT = 5 * 1000; // 15s timeout
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}>
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 const SentencePage: React.FC = () => {
   const [keyword, setKeyword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [showLogo, setShowLogo] = useState(true);
-  const [content, setContent] = useState<Sentence[] | null>();
+  const [sentenceCount, setSentenceCount] = useState(0);
+  const [content, setContent] = useState<Sentence[] | null>(null);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const handleClick = async () => {
     const queryUrl = `${baseUrl}/sentences/deu_news_2012_1M/sentences/${keyword}?offset=0&limit=10`;
@@ -39,6 +67,7 @@ const SentencePage: React.FC = () => {
         return;
       }
       setErrorMsg('');
+      setSentenceCount(data.count);
       setContent(data.sentences);
       console.log('data: ', data);
     } catch (e: unknown) {
@@ -58,6 +87,7 @@ const SentencePage: React.FC = () => {
     setKeyword(value);
     if (value.length === 0) {
       setErrorMsg('');
+      setSentenceCount(0);
       setContent(null);
       setShowLogo(true);
     } else {
@@ -70,12 +100,12 @@ const SentencePage: React.FC = () => {
     handleClick();
   }
 
+  function handleTabChange(_e: React.SyntheticEvent, newIndex: number) {
+    setTabIndex(newIndex);
+  }
+
   return (
-    <Stack
-      sx={{ height: '500px' }}
-      alignItems='center'
-      justifyContent='flexStart'
-      spacing={4}>
+    <>
       <Stack
         direction='row'
         spacing={2}>
@@ -118,31 +148,34 @@ const SentencePage: React.FC = () => {
           </Button>
         )}
       </Stack>
-      {errorMsg.length !== 0 ? (
-        <Card>
-          <CardContent>
-            <Typography
-              variant='h4'
-              color='error'>
-              {errorMsg}
-            </Typography>
-          </CardContent>
-        </Card>
-      ) : (
-        <List sx={{ overflow: 'auto' }}>
-          {content?.map(sentence => {
-            return (
-              <SentenceDetail
-                key={sentence.id}
-                keyword={keyword}
-                sentence={sentence.sentence}
-                source={sentence.source}
-              />
-            );
-          })}
-        </List>
+      {sentenceCount > 0 && (
+        <Typography>Statistics: {sentenceCount} sentences found.</Typography>
       )}
-    </Stack>
+      <Box>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={tabIndex}
+            variant='fullWidth'
+            onChange={handleTabChange}>
+            <Tab label='Sentences' />
+            <Tab label='Word Detail' />
+          </Tabs>
+        </Box>
+        <SentenceTabPanel
+          value={tabIndex}
+          index={0}
+          content={content}
+          errorMsg={errorMsg}
+          keyword={keyword}
+        />
+        <WordDetailTabPanel
+          value={tabIndex}
+          index={1}
+          content={'hello world!'}
+          keyword={keyword}
+        />
+      </Box>
+    </>
   );
 };
 
