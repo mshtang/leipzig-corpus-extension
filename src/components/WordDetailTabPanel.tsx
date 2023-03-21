@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React from 'react';
 
 interface WordDetailTabPanelProps {
@@ -13,12 +14,13 @@ const WordDetailTabPanel: React.FC<WordDetailTabPanelProps> = (
 ) => {
   const { children, value, index, content, keyword, ...other } = props;
   return (
-    <div
+    <Box
       role='tabpanel'
       hidden={value !== index}
+      sx={{ height: '600px' }}
       id='word-detail-tab-panel'>
       Value is {value}, Index is {index}, keyword is {keyword}
-    </div>
+    </Box>
   );
 };
 

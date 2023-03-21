@@ -62,10 +62,10 @@ const SentencePage: React.FC = () => {
   };
 
   function handleEnterPressed(key: string): void {
-    if (key === 'Enter') {
-      handleButtonClick();
+    if (key !== 'Enter') {
       return;
     }
+    handleButtonClick();
   }
 
   function handleTabChange(_e: React.SyntheticEvent, newIndex: number) {

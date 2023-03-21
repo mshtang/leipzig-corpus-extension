@@ -22,7 +22,7 @@ const SentenceTabPanel: React.FC<SentenceTabPanelProps> = (
       role='tabpanel'
       hidden={value !== index}
       id='sentence-tab-panel'
-      sx={{ height: '500px' }}>
+      sx={{ height: '600px', overflow: 'auto' }}>
       {errorMsg.length !== 0 ? (
         <Card>
           <CardContent>
@@ -34,7 +34,7 @@ const SentenceTabPanel: React.FC<SentenceTabPanelProps> = (
           </CardContent>
         </Card>
       ) : (
-        <List sx={{ overflow: 'auto' }}>
+        <List>
           {content?.map(sentence => {
             return (
               <SentenceDetail
