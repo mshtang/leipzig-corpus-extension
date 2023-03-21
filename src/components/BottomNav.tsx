@@ -3,26 +3,21 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import { useState } from 'react';
 import SentencePage from './SentencePage';
-import Settings from './Settings';
+import SettingsPage from './SettingsPage';
 
 function BottomNav() {
   const [value, setValue] = useState<'home' | 'settings'>('home');
 
-  const handleChange = (
-    _event: React.ChangeEvent<{}>,
-    newValue: 'home' | 'settings'
-  ) => {
-    setValue(newValue);
-  };
-
   return (
     <>
       {value === 'home' && <SentencePage />}
-      {value === 'settings' && <Settings corpus={''} />}
+      {value === 'settings' && <SettingsPage corpus={''} />}
       <BottomNavigation
+        showLabels
         value={value}
-        onChange={handleChange}
-        sx={{ width: '100%' }}>
+        onChange={(_e, newValue) => {
+          setValue(newValue);
+        }}>
         <BottomNavigationAction
           label='Home'
           value='home'
