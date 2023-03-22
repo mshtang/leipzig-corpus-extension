@@ -58,9 +58,10 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
     <div>
       <FormControl
         variant='standard'
-        sx={{ m: 1, minWidth: 500 }}>
+        sx={{ m: 1 }}>
         <InputLabel id='default-corpus-label'>Which corpus to use?</InputLabel>
         <Select
+          sx={{ width: '100%' }}
           labelId='default-corpus-label'
           id='default-corpus-select'
           value={selectedCorpus}
