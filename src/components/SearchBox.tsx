@@ -20,16 +20,14 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     <Grid
       container
       justifyContent='center'
-      alignItems='center'
-      margin='20px'>
+      alignItems='center'>
       <Grid
         item
         xs={12}
-        sm={6}
-        marginRight='40px'>
+        sm={6}>
         <TextField
           fullWidth
-          variant='outlined'
+          variant='standard'
           id='searchBox'
           label='Which word do you want to know?'
           onChange={onTextChanged}
@@ -65,7 +63,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                 height='56px'
               />
             ) : (
-              <SearchIcon style={{ fontSize: '56px' }} />
+              <SearchIcon style={{ fontSize: '56px', padding: '0.15em' }} />
             )}
           </Button>
         </Box>

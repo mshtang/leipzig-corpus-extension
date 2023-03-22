@@ -85,7 +85,10 @@ const SentencePage: React.FC = () => {
   }
 
   return (
-    <>
+    <Box
+      flexDirection='column'
+      display='flex'
+      justifyContent='center'>
       <SearchBox
         keyword={keyword}
         onTextChanged={handleSearchTextChanged}
@@ -119,7 +122,7 @@ const SentencePage: React.FC = () => {
           keyword={keyword}
         />
       </Box>
-    </>
+    </Box>
   );
 };
 
