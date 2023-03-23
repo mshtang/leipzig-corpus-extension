@@ -1,7 +1,7 @@
 import { Tab, Tabs } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sentence, SentencesResponse } from '../types/SentenceTypes';
 import { getWithTimeout } from '../Utils/getWithTimeout';
 import SearchBox from './SearchBox';
@@ -22,9 +22,15 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
   const [sentenceCount, setSentenceCount] = useState(0);
   const [content, setContent] = useState<Sentence[] | null>(null);
   const [tabIndex, setTabIndex] = useState(0);
+  const [offset, setOffset] = useState<number>(0);
+
+  useEffect(() => {
+    handleButtonClick();
+  }, [offset]);
+
+  const queryUrl = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=${offset}&limit=${numToShow}`;
 
   const handleButtonClick = async () => {
-    console.log('handleButtonClick called');
     if (keyword === '') {
       window.open(
         'https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018',
@@ -32,7 +38,7 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
       );
       return;
     }
-    const queryUrl = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=0&limit=${numToShow}`;
+
     console.log('queryUrl is', queryUrl);
 
     try {
@@ -68,20 +74,20 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
     }
   };
 
-  function handleEnterPressed(key: string): void {
+  const handleEnterPressed = (key: string) => {
     if (key !== 'Enter') {
       return;
     }
     handleButtonClick();
-  }
+  };
 
-  function handleTabChange(_e: React.SyntheticEvent, newIndex: number) {
+  const handleTabChange = (_e: React.SyntheticEvent, newIndex: number) => {
     setTabIndex(newIndex);
-  }
+  };
 
-  function handleSearchTextChanged(
+  const handleSearchTextChanged = (
     e: React.ChangeEvent<HTMLInputElement | HTMLInputElement>
-  ): void {
+  ) => {
     const value = e.currentTarget.value;
     setKeyword(value);
     if (value.length === 0) {
@@ -89,7 +95,26 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
       setSentenceCount(0);
       setContent(null);
     }
-  }
+  };
+
+  const handleDecreaseOffset = (e: React.MouseEvent<HTMLElement>) => {
+    setOffset(preOffset => {
+      const currOffset = preOffset - numToShow < 0 ? 0 : preOffset - numToShow;
+      console.log('decrease offset: ', currOffset);
+      return currOffset;
+    });
+  };
+
+  const handleIncreaseOffset = (e: React.MouseEvent<HTMLElement>) => {
+    setOffset(preOffset => {
+      const currOffset =
+        preOffset + numToShow > sentenceCount
+          ? preOffset
+          : preOffset + numToShow;
+      console.log('increase offset: ', currOffset);
+      return currOffset;
+    });
+  };
 
   return (
     <Box
@@ -103,7 +128,13 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
         onEnterPressed={handleEnterPressed}
       />
       {sentenceCount > 0 && (
-        <Typography>Statistics: {sentenceCount} sentences found.</Typography>
+        <Typography>
+          {' '}
+          <strong>{sentenceCount}</strong> sentences found, showing{' '}
+          <em>
+            {offset + 1} - {offset + numToShow}
+          </em>
+        </Typography>
       )}
       <Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -121,6 +152,8 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
           content={content}
           errorMsg={errorMsg}
           keyword={keyword}
+          onBackwardClicked={handleDecreaseOffset}
+          onForwardClicked={handleIncreaseOffset}
         />
         <WordDetailTabPanel
           value={tabIndex}
