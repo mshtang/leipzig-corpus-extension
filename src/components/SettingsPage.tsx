@@ -1,4 +1,5 @@
 import {
+  Box,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -6,56 +7,28 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface SettingsPageProps {
-  corpus?: string;
+  corpus: string;
+  numToShow: number;
+  helperText: string;
+  onSelectCorpus: (e: SelectChangeEvent) => void;
+  onSelectNumEntriesToShow: (e: SelectChangeEvent) => void;
 }
 
-const SettingsPage: React.FC<SettingsPageProps> = () => {
-  const [selectedCorpus, setSelectedCorpus] =
-    useState<string>('deu_news_2012_3M');
-  const [helperText, setHelperText] = useState<string>(
-    '3,000,000 sentences of a German news sub-corpus based on material from 2012'
-  );
-
-  const handleSelectCorpus = (event: SelectChangeEvent) => {
-    const corpusName = event.target.value;
-    setSelectedCorpus(corpusName);
-    switch (corpusName) {
-      case 'deu_news_2012_3M':
-        setHelperText(
-          '3,000,000 sentences of a German news sub-corpus based on material from 2012'
-        );
-        break;
-      case 'deu_news_2010_1M':
-        setHelperText(
-          '1,000,000 sentences of a German news sub-corpus based on material from 2010'
-        );
-        break;
-      case 'deu_wikipedia_2010_1M':
-        setHelperText(
-          '1,000,000 sentences of a German Wikipedia sub-corpus based on material from 2010'
-        );
-        break;
-      case 'eng_news_2013_3M':
-        setHelperText(
-          '3,000,000 sentences of a English news sub-corpus based on material from 2013'
-        );
-        break;
-      case 'eng_wikipedia_2012_1M':
-        setHelperText(
-          '1,000,000 sentences of a English Wikipedia sub-corpus based on material from 2012'
-        );
-        break;
-      default:
-        setHelperText('');
-        break;
-    }
-  };
-
+const SettingsPage: React.FC<SettingsPageProps> = ({
+  corpus,
+  numToShow,
+  helperText,
+  onSelectCorpus,
+  onSelectNumEntriesToShow,
+}) => {
   return (
-    <div>
+    <Box
+      height='745px'
+      flexDirection='column'
+      display='flex'>
       <FormControl
         variant='standard'
         sx={{ m: 1 }}>
@@ -64,8 +37,8 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
           sx={{ width: '100%' }}
           labelId='default-corpus-label'
           id='default-corpus-select'
-          value={selectedCorpus}
-          onChange={handleSelectCorpus}>
+          value={corpus}
+          onChange={onSelectCorpus}>
           <MenuItem value={'deu_news_2012_3M'}>German news 2012</MenuItem>
           <MenuItem value={'deu_news_2010_1M'}>German news 2010</MenuItem>
           <MenuItem value={'deu_wikipedia_2010_1M'}>German wiki 2010</MenuItem>
@@ -74,7 +47,26 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
         </Select>
         <FormHelperText>{helperText}</FormHelperText>
       </FormControl>
-    </div>
+      <FormControl
+        variant='standard'
+        sx={{ m: 1 }}>
+        <InputLabel id='default-num-entries-to-show-label'>
+          How many entries to display at once?
+        </InputLabel>
+        <Select
+          sx={{ width: '100%' }}
+          labelId='default-num-entries-to-show-label'
+          id='default-num-entries-to-show-select'
+          value={numToShow.toString()}
+          onChange={onSelectNumEntriesToShow}>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={30}>30</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 

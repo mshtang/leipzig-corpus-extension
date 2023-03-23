@@ -11,7 +11,12 @@ import WordDetailTabPanel from './WordDetailTabPanel';
 const baseUrl = 'http://api.corpora.uni-leipzig.de/ws';
 const REQUEST_TIMEOUT = 5 * 1000; // 15s timeout
 
-const SentencePage: React.FC = () => {
+interface SentencePageProps {
+  corpus: string;
+  numToShow: number;
+}
+
+const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
   const [keyword, setKeyword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [sentenceCount, setSentenceCount] = useState(0);
