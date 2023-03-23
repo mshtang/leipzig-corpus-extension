@@ -18,20 +18,26 @@ interface SentenceTabPanelProps {
   index: number;
   value: number;
   content: Sentence[] | null;
+  showForwardAndBackward: boolean;
   errorMsg: string;
   keyword: string;
-  onBackwardClicked: (e: React.MouseEvent<HTMLElement>) => void;
-  onForwardClicked: (e: React.MouseEvent<HTMLElement>) => void;
+  isBackwardDisabled: boolean;
+  isForwardDisabled: boolean;
+  onBackwardClick: (e: React.MouseEvent<HTMLElement>) => void;
+  onForwardClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const SentenceTabPanel: React.FC<SentenceTabPanelProps> = ({
   value,
   index,
   content,
+  showForwardAndBackward,
   errorMsg,
   keyword,
-  onBackwardClicked,
-  onForwardClicked,
+  isBackwardDisabled,
+  isForwardDisabled,
+  onBackwardClick,
+  onForwardClick,
 }: SentenceTabPanelProps) => {
   return (
     <Box
@@ -67,16 +73,22 @@ const SentenceTabPanel: React.FC<SentenceTabPanelProps> = ({
             })}
           </List>
         )}
-        <Stack
-          direction='row'
-          spacing='60px'>
-          <IconButton onClick={onBackwardClicked}>
-            <ChevronLeft fontSize='large' />
-          </IconButton>
-          <IconButton onClick={onForwardClicked}>
-            <ChevronRight fontSize='large' />
-          </IconButton>
-        </Stack>
+        {showForwardAndBackward && (
+          <Stack
+            direction='row'
+            spacing='60px'>
+            <IconButton
+              disabled={isBackwardDisabled}
+              onClick={onBackwardClick}>
+              <ChevronLeft fontSize='large' />
+            </IconButton>
+            <IconButton
+              disabled={isForwardDisabled}
+              onClick={onForwardClick}>
+              <ChevronRight fontSize='large' />
+            </IconButton>
+          </Stack>
+        )}
       </Box>
     </Box>
   );

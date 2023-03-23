@@ -31,7 +31,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           id='searchBox'
           label='Which word do you want to know?'
           onChange={onTextChanged}
-          onKeyUp={e => onEnterPressed(e.key)}
+          onKeyDown={e => onEnterPressed(e.key)}
         />
       </Grid>
       <Grid

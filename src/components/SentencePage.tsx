@@ -23,14 +23,19 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
   const [content, setContent] = useState<Sentence[] | null>(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [offset, setOffset] = useState<number>(0);
+  const [disableChevronLeft, setDisableChevronLeft] = useState<boolean>(true);
+  const [disableChevronRight, setDisableChevronRight] = useState<boolean>(true);
 
   useEffect(() => {
-    handleButtonClick();
-  }, [offset]);
+    setDisableChevronLeft(offset <= 0);
+    setDisableChevronRight(offset + numToShow >= sentenceCount);
+  }, [offset, numToShow, sentenceCount]);
 
   const queryUrl = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=${offset}&limit=${numToShow}`;
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = () => {
+    console.log('calling handleButtonClick');
+
     if (keyword === '') {
       window.open(
         'https://corpora.uni-leipzig.de/de?corpusId=deu_newscrawl-public_2018',
@@ -40,7 +45,11 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
     }
 
     console.log('queryUrl is', queryUrl);
+    searchKeyword();
+  };
 
+  const searchKeyword = async () => {
+    if (keyword === '') return;
     try {
       const response = await getWithTimeout(queryUrl, {
         timeout: REQUEST_TIMEOUT,
@@ -78,7 +87,7 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
     if (key !== 'Enter') {
       return;
     }
-    handleButtonClick();
+    searchKeyword();
   };
 
   const handleTabChange = (_e: React.SyntheticEvent, newIndex: number) => {
@@ -132,7 +141,10 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
           {' '}
           <strong>{sentenceCount}</strong> sentences found, showing{' '}
           <em>
-            {offset + 1} - {offset + numToShow}
+            {offset + 1} -{' '}
+            {offset + numToShow < sentenceCount
+              ? offset + numToShow
+              : sentenceCount}
           </em>
         </Typography>
       )}
@@ -152,8 +164,11 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
           content={content}
           errorMsg={errorMsg}
           keyword={keyword}
-          onBackwardClicked={handleDecreaseOffset}
-          onForwardClicked={handleIncreaseOffset}
+          showForwardAndBackward={sentenceCount > numToShow}
+          isBackwardDisabled={disableChevronLeft}
+          isForwardDisabled={disableChevronRight}
+          onBackwardClick={handleDecreaseOffset}
+          onForwardClick={handleIncreaseOffset}
         />
         <WordDetailTabPanel
           value={tabIndex}

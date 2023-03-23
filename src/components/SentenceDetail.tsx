@@ -12,43 +12,41 @@ interface SentenceDetailProps {
   source: Source;
 }
 
-const SentenceDetail: React.FC<SentenceDetailProps> = ({
-  keyword,
-  sentence,
-  source,
-}) => {
-  const [toggleShowSource, setToggleShowSource] = useState(false);
+const SentenceDetail: React.FC<SentenceDetailProps> = React.memo(
+  ({ keyword, sentence, source }) => {
+    const [toggleShowSource, setToggleShowSource] = useState(false);
 
-  return (
-    <Card sx={{ margin: '10px' }}>
-      <CardContent
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-        }}>
-        <Typography
-          variant='body1'
-          align='left'>
-          {sentence.split(keyword).map((part, i) => {
-            if (i === 0) {
-              return part;
-            } else {
-              return [<strong key={i}>{keyword}</strong>, part];
-            }
-          })}
-          {toggleShowSource && <SourceDetail source={source} />}
-        </Typography>
-        <IconButton onClick={_e => setToggleShowSource(!toggleShowSource)}>
-          {toggleShowSource ? (
-            <KeyboardArrowUpIcon />
-          ) : (
-            <KeyboardArrowDownIcon />
-          )}{' '}
-        </IconButton>
-      </CardContent>
-    </Card>
-  );
-};
+    return (
+      <Card sx={{ margin: '10px' }}>
+        <CardContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}>
+          <Typography
+            variant='body1'
+            align='left'>
+            {sentence.split(keyword).map((part, i) => {
+              if (i === 0) {
+                return part;
+              } else {
+                return [<strong key={i}>{keyword}</strong>, part];
+              }
+            })}
+            {toggleShowSource && <SourceDetail source={source} />}
+          </Typography>
+          <IconButton onClick={_e => setToggleShowSource(!toggleShowSource)}>
+            {toggleShowSource ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )}{' '}
+          </IconButton>
+        </CardContent>
+      </Card>
+    );
+  }
+);
 
 export default SentenceDetail;
