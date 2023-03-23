@@ -32,7 +32,9 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
       );
       return;
     }
-    const queryUrl = `${baseUrl}/sentences/deu_news_2012_1M/sentences/${keyword}?offset=0&limit=10`;
+    const queryUrl = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=0&limit=${numToShow}`;
+    console.log('queryUrl is', queryUrl);
+
     try {
       const response = await getWithTimeout(queryUrl, {
         timeout: REQUEST_TIMEOUT,
