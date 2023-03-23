@@ -13,15 +13,10 @@ const REQUEST_TIMEOUT = 5 * 1000; // 15s timeout
 
 interface SentencePageProps {
   corpus: string;
-  corpusInfo: string;
   numToShow: number;
 }
 
-const SentencePage: React.FC<SentencePageProps> = ({
-  corpus,
-  corpusInfo,
-  numToShow,
-}) => {
+const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
   const [keyword, setKeyword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [sentenceCount, setSentenceCount] = useState(0);
@@ -137,7 +132,6 @@ const SentencePage: React.FC<SentencePageProps> = ({
       justifyContent='center'>
       <SearchBox
         keyword={keyword}
-        corpusInfo={corpusInfo}
         onTextChanged={handleSearchTextChanged}
         onButtonClick={handleButtonClick}
         onEnterPressed={handleEnterPressed}

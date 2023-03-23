@@ -5,9 +5,11 @@ import {
   BottomNavigationAction,
   SelectChangeEvent,
 } from '@mui/material';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import SentencePage from './SentencePage';
 import SettingsPage from './SettingsPage';
+
+export const CorpusInfoContext = createContext('');
 
 function BottomNav() {
   const [selectedPage, setSelectedPage] = useState<'home' | 'settings'>('home');
@@ -63,11 +65,12 @@ function BottomNav() {
   return (
     <>
       {selectedPage === 'home' && (
-        <SentencePage
-          corpus={selectedCorpus}
-          corpusInfo={helperText}
-          numToShow={numEntriesToShow}
-        />
+        <CorpusInfoContext.Provider value={helperText}>
+          <SentencePage
+            corpus={selectedCorpus}
+            numToShow={numEntriesToShow}
+          />
+        </CorpusInfoContext.Provider>
       )}
       {selectedPage === 'settings' && (
         <SettingsPage
