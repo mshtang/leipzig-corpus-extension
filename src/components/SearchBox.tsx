@@ -1,10 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, Grid, TextField } from '@mui/material';
+import { Box, Button, Grid, TextField, Tooltip } from '@mui/material';
 import React from 'react';
 import projectLogo from '../assets/logo.png';
 
 interface SearchBoxProps {
   keyword: string;
+  corpusInfo: string;
   onTextChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEnterPressed: (e: string) => void;
   onButtonClick: () => void;
@@ -12,6 +13,7 @@ interface SearchBoxProps {
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   keyword,
+  corpusInfo,
   onTextChanged,
   onEnterPressed,
   onButtonClick,
@@ -63,7 +65,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                 height='56px'
               />
             ) : (
-              <SearchIcon style={{ fontSize: '56px', padding: '0.15em' }} />
+              <Tooltip
+                arrow
+                title={`This corpus consists of ${corpusInfo}`}>
+                <SearchIcon style={{ fontSize: '56px', padding: '0.15em' }} />
+              </Tooltip>
             )}
           </Button>
         </Box>

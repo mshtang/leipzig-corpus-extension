@@ -65,6 +65,7 @@ function BottomNav() {
       {selectedPage === 'home' && (
         <SentencePage
           corpus={selectedCorpus}
+          corpusInfo={helperText}
           numToShow={numEntriesToShow}
         />
       )}
