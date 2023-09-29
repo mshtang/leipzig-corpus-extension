@@ -1,25 +1,40 @@
 import { Box } from '@mui/material';
+import Typography from '@mui/material/Typography/Typography';
 import React from 'react';
 
 interface WordDetailTabPanelProps {
-  children?: React.ReactNode;
-  index: number;
   value: number;
-  content: string;
-  keyword: string;
+  index: number;
+  word: string;
+  wordFreq: number;
+  wordRank: number;
 }
 
-const WordDetailTabPanel: React.FC<WordDetailTabPanelProps> = (
-  props: WordDetailTabPanelProps
-) => {
-  const { children, value, index, content, keyword, ...other } = props;
+// http://api.corpora.uni-leipzig.de/ws/words/deu_news_2012_1M/word/der
+// {
+//   "freq": 0,
+//   "frequencyClass": 0,
+//   "id": 0,
+//   "word": "string",
+//   "wordRank": 0
+// }
+
+const WordDetailTabPanel: React.FC<WordDetailTabPanelProps> = ({
+  value,
+  index,
+  word,
+  wordFreq,
+  wordRank,
+}: WordDetailTabPanelProps) => {
   return (
     <Box
       role='tabpanel'
       hidden={value !== index}
       sx={{ height: '600px' }}
       id='word-detail-tab-panel'>
-      Value is {value}, Index is {index}, keyword is {keyword}
+      <Typography variant='h3'>Keyword: {word}</Typography>
+      <Typography variant='h4'>Frequency: {wordFreq}</Typography>
+      <Typography variant='h4'>Word Rank: {wordRank}</Typography>
     </Box>
   );
 };
