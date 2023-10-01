@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { Sentence, SentencesResponse } from '../types/SentenceTypes';
+import { WordDetailResponse } from '../types/WordTypes';
 import { getWithTimeout } from '../Utils/getWithTimeout';
 import SearchBox from './SearchBox';
 import SentenceTabPanel from './SentenceTabPanel';
@@ -25,13 +26,16 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
   const [offset, setOffset] = useState<number>(0);
   const [disableChevronLeft, setDisableChevronLeft] = useState<boolean>(true);
   const [disableChevronRight, setDisableChevronRight] = useState<boolean>(true);
+  const [wordFreq, setWordFreq] = useState<number>(0);
+  const [wordRank, setWordRank] = useState<number>(0);
 
   useEffect(() => {
     setDisableChevronLeft(offset <= 0);
     setDisableChevronRight(offset + numToShow >= sentenceCount);
   }, [offset, numToShow, sentenceCount]);
 
-  const queryUrl = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=${offset}&limit=${numToShow}`;
+  const queryUrlForSentences = `${baseUrl}/sentences/${corpus}/sentences/${keyword}?offset=${offset}&limit=${numToShow}`;
+  const queryUrlForWordDetails = `${baseUrl}/words/${corpus}/words/${keyword}`;
 
   const handleButtonClick = () => {
     console.log('calling handleButtonClick');
@@ -44,14 +48,13 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
       return;
     }
 
-    console.log('queryUrl is', queryUrl);
-    searchKeyword();
+    searchSentencesByKeyword();
   };
 
-  const searchKeyword = async () => {
+  const searchSentencesByKeyword = async () => {
     if (keyword === '') return;
     try {
-      const response = await getWithTimeout(queryUrl, {
+      const response = await getWithTimeout(queryUrlForSentences, {
         timeout: REQUEST_TIMEOUT,
       });
       if (!response.ok) {
@@ -83,11 +86,44 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
     }
   };
 
+  const searchWordDetailsByKeyword = async () => {
+    if (keyword === '') return;
+    try {
+      const response = await getWithTimeout(queryUrlForWordDetails, {
+        timeout: REQUEST_TIMEOUT,
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      console.log('response: ', response);
+      const data: WordDetailResponse = await response.json();
+      if (!data) {
+        setErrorMsg('No response from server.');
+        return;
+      }
+
+      if (data.word === '') {
+        setErrorMsg('No sentence containing the searching word is found.');
+        return;
+      }
+      setErrorMsg('');
+      console.log('data: ', data);
+    } catch (e: unknown) {
+      console.error('[fetch ERROR]', e);
+      if (e instanceof Error && e?.name === 'AbortError') {
+        setErrorMsg('timeoutError');
+      } else {
+        setErrorMsg('internalServerError');
+      }
+    }
+  };
+
   const handleEnterPressed = (key: string) => {
     if (key !== 'Enter') {
       return;
     }
-    searchKeyword();
+    searchSentencesByKeyword();
   };
 
   const handleTabChange = (_e: React.SyntheticEvent, newIndex: number) => {
@@ -174,8 +210,9 @@ const SentencePage: React.FC<SentencePageProps> = ({ corpus, numToShow }) => {
         <WordDetailTabPanel
           value={tabIndex}
           index={1}
-          content={'hello world!'}
-          keyword={keyword}
+          word={keyword}
+          wordFreq={wordFreq}
+          wordRank={wordRank}
         />
       </Box>
     </Box>
