@@ -13,6 +13,7 @@ export async function getWithTimeout(
   const id = setTimeout(() => controller.abort(), timeout);
   const response = await fetch(resource, {
     ...options,
+    mode: 'no-cors',
     signal: controller.signal,
   });
   clearTimeout(id);
