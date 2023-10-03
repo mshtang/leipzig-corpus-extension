@@ -3,6 +3,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {
   BottomNavigation,
   BottomNavigationAction,
+  Paper,
   SelectChangeEvent,
 } from '@mui/material';
 import { createContext, useState } from 'react';
@@ -63,7 +64,16 @@ function BottomNav() {
   };
 
   return (
-    <>
+    <Paper
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        margin: '20px',
+        padding: '20px',
+      }}
+      elevation={3}>
       {selectedPage === 'home' && (
         <CorpusInfoContext.Provider value={helperText}>
           <SentencePage
@@ -98,7 +108,7 @@ function BottomNav() {
           icon={<SettingsIcon />}
         />
       </BottomNavigation>
-    </>
+    </Paper>
   );
 }
 
