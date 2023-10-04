@@ -44,7 +44,7 @@ const SentenceTabPanel: React.FC<SentenceTabPanelProps> = ({
       role='tabpanel'
       hidden={value !== index}
       id='sentence-tab-panel'
-      sx={{ height: '600px', overflow: 'auto' }}>
+      sx={{ overflow: 'auto' }}>
       <Box
         display='flex'
         flexDirection='column'

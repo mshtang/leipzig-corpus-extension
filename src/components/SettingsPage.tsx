@@ -26,7 +26,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
 }) => {
   return (
     <Box
-      height='745px'
       flexDirection='column'
       display='flex'>
       <FormControl

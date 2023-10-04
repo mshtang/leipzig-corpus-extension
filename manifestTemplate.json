@@ -1,0 +1,27 @@
+{
+    "name": "Leipzig Corpus Extension",
+    "version": "1.0",
+    "description": "A browser extension for querying Leipzig Corpus quickly without opening its home page.",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/*"
+            ],
+            "css": [
+                "assets/index-*.css"
+            ],
+            "js": [
+                "assets/index-*.js"
+            ]
+        }
+    ],
+    "action": {
+        "default_icon": {
+            "16": "favicon.png",
+            "24": "favicon.png",
+            "32": "favicon.png"
+        },
+        "default_popup": "index.html"
+    }
+}
